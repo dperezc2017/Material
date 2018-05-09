@@ -1,0 +1,81 @@
+package com.example.peliculaDOM;
+
+import java.util.EmptyStackException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+public class ConvertirXMLenEstructuraDOM {
+	private static final Logger logger = LoggerFactory.getLogger(ConvertirXMLenEstructuraDOM.class);
+	private static Element elementoRaiz;
+	// private static boolean prueba;
+	private static String prueba;
+	private static String prueba2;
+
+	public static void main(String[] args) {
+		lecturaXML();
+		if (prueba.equals("verdadero")) {
+			System.out.println("prueba: " + prueba);
+		} else {
+			System.out.println("falso");
+		}
+	}
+
+	public static void lecturaXML() {
+		try {
+
+			DocumentBuilderFactory factoria = DocumentBuilderFactory.newInstance();
+			DocumentBuilder creacionDocumento = factoria.newDocumentBuilder();
+			Document documento = creacionDocumento.parse("peliculas.xml");
+
+			elementoRaiz = documento.getDocumentElement();
+
+			// logger.info("elementoRaiz: "+elementoRaiz);
+			NodeList listaPeliculas = elementoRaiz.getElementsByTagName("pelicula");
+			// logger.info("listaPeliculas: "+listaPeliculas);
+			// <pelicula></pelicula>
+			for (int i = 0; i < listaPeliculas.getLength(); i++) {
+				Node pelicula = listaPeliculas.item(i);
+				// logger.info("Node pelicula: "+pelicula);
+				System.out.println("||Pelicula: " + i);
+				// <nombre></nombre>...
+				NodeList datosPelicula = pelicula.getChildNodes();
+				for (int j = 0; j < datosPelicula.getLength(); j++) {
+					Node datos = datosPelicula.item(j);
+					// logger.info("Node datos: "+datos);
+					if (datos.getNodeType() == Node.ELEMENT_NODE) {
+						System.out.println("|TAG :" + datos.getNodeName());
+					}
+
+					Node contenido = datos.getFirstChild();
+					// logger.info("Node contenido: "+contenido);
+					if (contenido != null) {
+						System.out.println("|||VALUE " + contenido.getNodeValue());
+						
+					}
+
+
+
+				}
+				
+				System.out.println("°°");
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static String retornarNombre(String value) {
+		return value;
+	}
+}
